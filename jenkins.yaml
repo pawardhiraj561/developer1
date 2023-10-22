@@ -1,0 +1,28 @@
+jenkins:
+  systemMessage: "Welcome to our Jenkins CI/CD server."
+  quietPeriod: 5
+  nodeProperties:
+    - toolLocation:
+        name: "Docker"
+        home: "/usr/bin/docker"
+  clouds:
+    - docker:
+        name: "docker"
+        serverUrl: "http://docker-host:2375"
+  jobs:
+    - script: >
+        pipeline {
+          agent any
+          stages {
+            stage('Checkout') {
+              steps {
+                checkout scm
+              }
+            }
+            stage('Build') {
+              steps {
+                sh 'mvn clean package'
+              }
+            }
+          }
+        }
